@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { IMAGE_URL, IMAGE_BACKCARD } from './constants';
+import ReactTooltip from 'react-tooltip';
 
 const Container = styled.div`
   display: flex;
@@ -19,8 +20,6 @@ const Card = styled.div`
   box-shadow: #e6e6e6 3px 2px 6px ;
 `;
 
-
-
 const CardContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -37,13 +36,18 @@ const StartButton = styled.button`
   border-radius: 4px;
   background-color: #71a9c6;
   color: #fff;
-  margin-bottom: 50px; 
+  margin-bottom: 50px;
+  cursor: pointer;
 `;
 
 const StyledImage = styled.img`
   width: 162px; 
   height: 309px;
-`; 
+`;
+
+const ImageLink = styled.a`
+  cursor: pointer;
+`;
 
 const CardComponent = ({ cards, isStarted, handleStart, handleSelectCard }) => (
   <Container>
@@ -53,12 +57,13 @@ const CardComponent = ({ cards, isStarted, handleStart, handleSelectCard }) => (
       </StartButton>
     </ButtonContainer>
     <CardContainer>
-      {cards.map(({ name, image, isSelected }) => 
-        <Card key={name} isSelected={isSelected}>
+      {cards.map(({ name, image, isSelected }, index) => 
+        <Card key={name} isSelected={isSelected} data-tip={isSelected ? name : '?'}>
+         {index === cards.length - 1 && <ReactTooltip  effect="float"/>}
           {isStarted  && !isSelected ? (
-            <a href="javascript:void(0);" onClick={() => handleSelectCard(name)}>
+            <ImageLink onClick={() => handleSelectCard(name)}>
               <StyledImage src={IMAGE_BACKCARD} alt={name} />
-            </a>
+            </ImageLink>
           ) : (
             <StyledImage src={IMAGE_URL + image} alt={name} />
           )}
